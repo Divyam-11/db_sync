@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Fetching Demo</title>
+</head>
+<body>
+    <h1>Data Fetching Demo</h1>
+    <select id="dataDropdown" onchange="showValue()"></select>
+    <div id="selectedValue"></div>
+
+    <script>
+        // Function to fetch data from the server and populate dropdown
+        async function fetchData() {
+            try {
+                const response = await fetch('/fetch_data');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const data = await response.json();
+                const dropdown = document.getElementById('dataDropdown');
+                dropdown.innerHTML = ''; // Clear dropdown options
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.text = item.id_name;
+                    option.value = item.value; // Set value attribute with the corresponding value
+                    dropdown.add(option);
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error.message);
+            }
+        }
+
+        // Function to display selected value
+        function showValue() {
+            const dropdown = document.getElementById('dataDropdown');
+            const selectedValue = dropdown.value; // Get selected value from dropdown
+            const valueDisplay = document.getElementById('selectedValue');
+            valueDisplay.textContent = selectedValue; // Display selected value
+        }
+
+        // Call fetchData function when the page loads
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
